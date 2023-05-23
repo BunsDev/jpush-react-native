@@ -17,6 +17,10 @@
 #import <UserNotifications/UserNotifications.h>
 #endif
 
+@interface AppDelegate ()<JPUSHRegisterDelegate>
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
@@ -26,15 +30,17 @@
   // APNS
   JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];
   if (@available(iOS 12.0, *)) {
-    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound|JPAuthorizationOptionProvidesAppNotificationSettings;
+    entity.types = JPAuthorizationOptionNone; //JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSou//nd|JPAuthorizationOptionProvidesAppNotificationSettings;
   }
   [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
-  [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
-  // 自定义消息
-  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-  [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
-  // 地理围栏
-  [JPUSHService registerLbsGeofenceDelegate:self withLaunchOptions:launchOptions];
+  
+  
+//  [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+//  // 自定义消息
+//  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+//  [defaultCenter addObserver:self selector:@selector(networkDidReceiveMessage:) name:kJPFNetworkDidReceiveMessageNotification object:nil];
+//  // 地理围栏
+//  [JPUSHService registerLbsGeofenceDelegate:self withLaunchOptions:launchOptions];
   // ReactNative环境配置
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
